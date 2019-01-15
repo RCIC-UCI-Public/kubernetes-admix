@@ -1,0 +1,25 @@
+---
+- package:  Docker CE Download  
+  name: docker-ce-download 
+  description: >
+    Download Docker Container Edition {{ version }}. 
+  versions: !include k8s_versions.yaml
+  version: "{{ versions.docker_ce }}"
+  pkgname: "{{ name }}"
+  src_tar: 
+  extension: 
+  src_dir: . 
+  build:
+  root: "/opt/kubernetes"
+  build:
+    configure: echo 
+    repos: base,updates,extras,docker-ce-stable
+    dockerpkgs: docker-ce 
+    pkgmake: yumdownloader -y --destdir=. --resolve --disablerepo=* --enablerepo={{ build.repos }} {{ build.dockerpkgs }} 
+    target: 
+  install:
+     makeinstall: >
+       echo {{ build.pkgmake }} > $(ROOT){{root}}/{{ name }}.sh;
+       /usr/bin/mv *rpm $(REDHAT.ROOT)/RPMS/$(ARCH) 
+  files:
+    - "{{ root }}/*"

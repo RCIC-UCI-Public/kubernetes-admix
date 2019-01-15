@@ -1,0 +1,6 @@
+k8s-repo
+docker-ce-repo
+k8s-download
+docker-ce-download
+calicoctl
+kube-profile

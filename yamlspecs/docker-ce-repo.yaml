@@ -1,0 +1,24 @@
+---
+- package:  Docker CE Yum Repo
+  name: docker-ce-repo 
+  versions: !include k8s_versions.yaml
+  version: "{{ versions.docker_ce }}"
+  description: >
+    Docker-CE YUM repo for docker container edition {{ version }}. 
+  root: "/etc/yum.repos.d"
+  repofile: docker-ce.repo
+  src_tarball:
+  extension: 
+  src_dir: .
+  pkgname: "{{ name }}"
+  addfile:
+    - "{{ repofile }}"
+  build:
+    configure: echo 
+    pkgmake: echo 
+    target: 
+  install:
+     makeinstall: >
+       $(INSTALL) -m 644 {{ repofile }} $(ROOT){{ root }}
+  files:
+    -  "{{ root }}/*"

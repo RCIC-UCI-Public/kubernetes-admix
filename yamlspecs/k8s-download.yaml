@@ -1,0 +1,29 @@
+---
+- package:  k8s Download  
+  name: k8s-download 
+  versions: !include k8s_versions.yaml
+  version: "{{ versions.k8s }}"
+  description: >
+    Download Docker Container Edition {{ version }}. 
+  pkgname: "{{ name }}"
+  root: "/opt/kubernetes"
+  src_tarball: 
+  extension: 
+  src_dir: .
+  rpmrename: rpmrename.sh 
+  addfile:
+    - "{{ rpmrename }}"
+  build:
+    configure: echo 
+    repos: base,updates,extras,kubernetes
+    kubepkgs: kubectl kubeadm kubelet 
+    pkgmake: yumdownloader -y --destdir=. --resolve --disablerepo=* --enablerepo={{ build.repos }} {{ build.kubepkgs }} 
+    target: 
+  install:
+     makeinstall: >
+       echo {{ build.pkgmake }} > $(ROOT){{root}}/{{ name }}.sh;
+       $(INSTALL) {{ rpmrename }} $(ROOT){{ root }};
+       sh {{ rpmrename }};
+       /usr/bin/mv *rpm $(REDHAT.ROOT)/RPMS/$(ARCH) 
+  files:
+    - "{{ root }}/*"

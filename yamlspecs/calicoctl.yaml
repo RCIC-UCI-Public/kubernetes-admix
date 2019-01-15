@@ -1,0 +1,28 @@
+---
+- package: calicoctl for k8s container networking 
+  name: calicoctl 
+  versions: !include k8s_versions.yaml
+  version: "{{ versions.calicoctl }}"
+  pkgname: "{{ name }}"
+  src_tarball: 
+  src_dir: .
+  extension:
+  calicoctlhtml: https://github.com/projectcalico/calicoctl/releases/download/v{{ version }}/calicoctl
+  scriptfile: calicoctl-profile.sh 
+  addfile: 
+    - "{{ scriptfile }}"
+  description: >
+    Calicoctl for k8s {{ version }}. 
+  root: "/etc/profile.d"
+  build:
+    configure: echo 
+    pkgmake: curl -O -L {{ calicoctlhtml }} 
+    target: 
+  install:
+     makeinstall: >
+       $(INSTALL) -m 555 {{ scriptfile }} $(ROOT){{ root }};
+       mkdir -p $(ROOT)/usr/sbin;
+       $(INSTALL) -m 555 {{ name }} $(ROOT)/usr/sbin
+  files:
+    -  "{{ root }}/*"
+    -  /usr/sbin/*

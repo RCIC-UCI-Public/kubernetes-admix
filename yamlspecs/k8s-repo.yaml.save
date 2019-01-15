@@ -1,0 +1,30 @@
+---
+- package:  Kubernetes Yum Repo
+  name: k8s-repo 
+  versions: !include k8s_versions.yaml
+  version: "{{ versions.k8s }}"
+  extension: tar.gz
+  pkgname: "{{ name }}"
+  srctar: 
+  srcdir: .
+  repofile: kubernetes.repo
+  addfile: 
+    - {{ repofile }}
+    mkdir {{ name }}-{{ version }};
+    $(INSTALL) {{ repofile }} {{ name }}-{{ version }};
+    $(TAR) czf ../sources/{{ srctar }} {{ name }}-{{ version }} 
+  build:
+  description: >
+    Kubernetes YUM repo for k8s {{ version }}. 
+  root: "/etc/yum.repos.d"
+  build:
+    configure: echo 
+    pkgmake: echo 
+    target: 
+  install:
+     makeinstall: >
+       mkdir -p $(ROOT){{ root }};
+       $(INSTALL) -m 644 {{ repofile }} $(ROOT){{ root }}
+  files:
+    -  "{{ root }}/*"
+  clean: "{{ name }}-{{ version }}"

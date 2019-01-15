@@ -1,0 +1,24 @@
+---
+- package: Kubeadm profile file 
+  name: kube-profile 
+  versions: !include k8s_versions.yaml
+  version: "{{ versions.k8s }}"
+  pkgname: "{{ name }}"
+  src_tarball: 
+  src_dir: .
+  extension:
+  scriptfile: kube-profile.sh 
+  addfile: 
+    - "{{ scriptfile }}"
+  description: >
+    Calicoctl for k8s {{ version }}. 
+  root: "/etc/profile.d"
+  build:
+    configure: echo 
+    pkgmake: echo 
+    target: 
+  install:
+     makeinstall: >
+       $(INSTALL) -m 555 {{ scriptfile }} $(ROOT){{ root }}
+  files:
+    -  "{{ root }}/*"
