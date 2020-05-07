@@ -1,0 +1,21 @@
+!include rcic-package.yaml
+---
+- package: template
+  versions: !include versions.yaml
+  pkgname: "{{name}}"
+  src_tarball: 
+  src_dir: .
+  extension:
+  addfile: 
+    - "{{scriptfile}}"
+  build:
+    configure: echo 
+    pkgmake: echo
+    target: 
+  filemod: "555"
+  install:
+     makeinstall: >
+       mkdir -p $(ROOT){{root}};
+       $(INSTALL) -m {{filemod}} {{scriptfile}} $(ROOT){{root}}
+  files:
+    - "{{root}}"
